@@ -36,19 +36,19 @@ const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
 
-// Add CORS headers to all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Requested-With"
-  );
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+// // Add CORS headers to all responses
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Content-Type, Authorization, X-Requested-With"
+//   );
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+//   next();
+// });
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -56,8 +56,10 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: process.env.FRONTEND_URL || "*", // Get from environment or allow all temporarily
+    origin: corsOptions.origin, // Get from environment or allow all temporarily
     methods: ["GET", "POST"],
+    allowedHeaders: corsOptions.allowedHeaders,
+    credentials: true,
   },
 });
 
