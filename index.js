@@ -22,7 +22,8 @@ require("dotenv").config();
 // Set up CORS options
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL || "https://collabgpt-production.up.railway.app",
+    process.env.FRONTEND_URL ||
+      "https://collabgpt-frontend-production.up.railway.app",
     "http://localhost:5173", // Keep for local development
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
