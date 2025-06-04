@@ -27,7 +27,12 @@ const corsOptions = {
     "http://localhost:5173", // Keep for local development
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  allowedHeaders: [
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "Access-Control-Allow-Origin",
+  ],
   maxAge: 86400, // 24 hours
 };
 
@@ -37,18 +42,18 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Add CORS headers to all responses
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*");
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header(
-    "Access-Control-Allow-Headers",
-    "Content-Type, Authorization, X-Requested-With"
-  );
-  if (req.method === "OPTIONS") {
-    return res.sendStatus(200);
-  }
-  next();
-});
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+//   res.header(
+//     "Access-Control-Allow-Headers",
+//     "Content-Type, Authorization, X-Requested-With"
+//   );
+//   if (req.method === "OPTIONS") {
+//     return res.sendStatus(200);
+//   }
+//   next();
+// });
 
 // Create HTTP server
 const server = http.createServer(app);
