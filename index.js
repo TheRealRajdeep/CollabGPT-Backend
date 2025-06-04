@@ -22,9 +22,7 @@ require("dotenv").config();
 // Set up CORS options
 const corsOptions = {
   origin: [
-    process.env.FRONTEND_URL ||
-      "https://collabgpt-frontend-production.up.railway.app",
-    "http://localhost:5173", // Keep for local development
+    process.env.FRONTEND_URL || "http://localhost:5173", // Keep for local development
   ],
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
@@ -33,6 +31,7 @@ const corsOptions = {
     "X-Requested-With",
     "Access-Control-Allow-Origin",
   ],
+  credentials: true,
   maxAge: 86400, // 24 hours
 };
 
@@ -42,18 +41,18 @@ app.use(cors(corsOptions));
 app.use(express.json());
 
 // Add CORS headers to all responses
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Content-Type, Authorization, X-Requested-With"
-//   );
-//   if (req.method === "OPTIONS") {
-//     return res.sendStatus(200);
-//   }
-//   next();
-// });
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header(
+    "Access-Control-Allow-Headers",
+    "Content-Type, Authorization, X-Requested-With"
+  );
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+  next();
+});
 
 // Create HTTP server
 const server = http.createServer(app);
@@ -61,7 +60,7 @@ const server = http.createServer(app);
 // Initialize Socket.IO
 const io = new Server(server, {
   cors: {
-    origin: corsOptions.origin, // Get from environment or allow all temporarily
+    origin: corsOptions, // Get from environment or allow all temporarily
     methods: ["GET", "POST"],
     allowedHeaders: corsOptions.allowedHeaders,
     credentials: true,
